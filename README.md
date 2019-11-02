@@ -1,30 +1,40 @@
 Role Name
 =========
 
-A simple ansible role for installing latest version of hassio.io on CentOS
+Ansible role for installing Home Assistant via hassio-installer ( https://github.com/home-assistant/hassio-installer ) on CentOS
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+Only requirement is base installation of CentOS 7. The role takes care of installing dependencies, docker and opens required firewall ports.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
+The following configuration variables are available. The values provided below are the default values.
+```yaml
+# Opens ports for homekit in firewalld
+hassio_fw_enable_homekit: false
+# Opens ports for mqtt in firewalld
+hassio_fw_enable_mqtt: false
+# Opens ports for http in firewalld
+hassio_fw_enable_http: false
+# Opens ports for https in firewalld
+hassio_fw_enable_https: false
+# Opens ports for Nginx Proxy Manager Addon in firewalld
+hassio_fw_enable_proxymanager: false
+# Opens ports for homeassistant default port in firewalld
+hassio_fw_enable_homeassistant: true
+# Opens ports for unify addon in firewalld
+hassio_fw_enable_unifi: false
+# Opens ports for multicast dns in firewalld
+hassio_fw_enable_mdns: false
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
+This role uses geerlingguy.docker for installing or upgrading docker on the host.
 
 Example Playbook
 ----------------
@@ -51,10 +61,9 @@ passed in as parameters) is always nice for users too:
 License
 -------
 
-BSD
+BSD, MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
+The role was created by @samuelon. Pull Requests are welcome and please report bugs in the issues section.

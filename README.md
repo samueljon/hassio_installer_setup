@@ -1,4 +1,4 @@
-Role Name
+Ansible Role: hassio_installer_setup
 =========
 
 Ansible role for installing Home Assistant via hassio-installer ( https://github.com/home-assistant/hassio-installer ) on CentOS

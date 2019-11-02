@@ -66,4 +66,4 @@ BSD, MIT
 Author Information
 ------------------
 
-The role was created by @samuelon. Pull Requests are welcome and please report bugs in the issues section.
+The role was created by @samueljon. Pull Requests are welcome and please report bugs in the issues section.

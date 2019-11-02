@@ -39,7 +39,7 @@ This role uses geerlingguy.docker for installing or upgrading docker on the host
 Example Playbook
 ----------------
 
-    - hosts: homeassitant
+    - hosts: homeassistant
       become: true
 
       tasks:

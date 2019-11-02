@@ -23,8 +23,6 @@
           # Selinux debug tools
           - setroubleshoot-server
           - firewalld
-          - vim-enhanced
-          - htop
           - git
           - bash-completion
           - bash-completion-extras
@@ -35,8 +33,8 @@
 - name: start firewalld service and enable at boot
   systemd:
       state: started
-      enabled: TRUE
-      masked: FALSE
+      enabled: true
+      masked: false
       name: firewalld
 
 - name: Populate service facts
@@ -52,7 +50,6 @@
       - hassio_fw_enable_https
       - ansible_facts.services["firewalld.service"] is defined
       - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
-
 
 - name: Allow HTTP traffic on port 80
   firewalld:
@@ -143,8 +140,8 @@
       warn: false
       creates: /etc/systemd/system/hassio-supervisor.service
 
-- name: Wait for 30 seconds for port 8123 to be come available, timeout after 180 secs.
+- name: Wait for 10 seconds for port 8123 to be come available, timeout after 180 secs.
   wait_for:
       port: 8123
-      delay: 30
+      delay: 10
       timeout: 180

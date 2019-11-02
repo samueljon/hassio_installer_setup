@@ -6,7 +6,7 @@ Ansible role for installing Home Assistant via hassio-installer ( https://github
 Requirements
 ------------
 
-Only requirement is base installation of CentOS 7. The role takes care of installing dependencies, docker and opens required firewall ports.
+Only requirement is base installation of CentOS 7 and that firewalld is used as default firewall. The role takes care of installing dependencies, docker and opens required firewall ports.
 
 Role Variables
 --------------
@@ -39,10 +39,7 @@ This role uses geerlingguy.docker for installing or upgrading docker on the host
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: homeassitant
       become: true
 
       tasks:

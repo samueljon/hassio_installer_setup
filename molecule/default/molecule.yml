@@ -1,0 +1,22 @@
+---
+dependency:
+    name: galaxy
+driver:
+    name: docker
+lint:
+    name: yamllint
+platforms:
+    - name: hassio_centos7systemd
+      image: docker.io/samueljon/centos-7-systemd:latest
+      privileged: True
+      volume_mounts:
+          - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+      command: "/usr/sbin/init"
+provisioner:
+    name: ansible
+    lint:
+        name: ansible-lint
+verifier:
+    name: testinfra
+    lint:
+        name: flake8

@@ -1,0 +1,16 @@
+---
+- name: Converge
+  hosts: all
+
+  tasks:
+      - include_role:
+            name: samueljon.hassio_installer_setup
+        vars:
+            hassio_fw_enable_homekit: true
+            hassio_fw_enable_mqtt: true
+            hassio_fw_enable_http: true
+            hassio_fw_enable_https: true
+            hassio_fw_enable_proxymanager: true
+            hassio_fw_enable_homeassistant: true
+            hassio_fw_enable_unifi: true
+            hassio_fw_enable_mdns: true

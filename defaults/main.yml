@@ -1,0 +1,18 @@
+---
+# defaults file for samueljon.hassio_installer_setup
+# Opens ports for homekit in firewalld
+hassio_fw_enable_homekit: false
+# Opens ports for mqtt in firewalld
+hassio_fw_enable_mqtt: false
+# Opens ports for http in firewalld
+hassio_fw_enable_http: false
+# Opens ports for https in firewalld
+hassio_fw_enable_https: false
+# Opens ports for Nginx Proxy Manager Addon in firewalld
+hassio_fw_enable_proxymanager: false
+# Opens ports for homeassistant default port in firewalld
+hassio_fw_enable_homeassistant: true
+# Opens ports for unify addon in firewalld
+hassio_fw_enable_unifi: false
+# Opens ports for multicast dns in firewalld
+hassio_fw_enable_mdns: false

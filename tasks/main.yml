@@ -1,0 +1,150 @@
+---
+# tasks file for samueljon.hassio_installer_setup
+- name: Install extra packages for enterprise linux (epel)
+  yum:
+      name: epel-release
+      state: present
+      update_cache: True
+
+- name: install hassio-installer prereqs
+  yum:
+      name:
+          - bash
+          - jq
+          - curl
+          - avahi-tools
+          - dbus
+          - NetworkManager
+      state: present
+
+- name: install additional prereqs
+  yum:
+      name:
+          # Selinux debug tools
+          - setroubleshoot-server
+          - firewalld
+          - vim-enhanced
+          - htop
+          - git
+          - bash-completion
+          - bash-completion-extras
+          # Apple Homekit support related
+          - avahi-compat-libdns_sd
+      state: present
+
+- name: start firewalld service and enable at boot
+  systemd:
+      state: started
+      enabled: TRUE
+      masked: FALSE
+      name: firewalld
+
+- name: Populate service facts
+  service_facts:
+
+- name: Allow HTTPS traffic on port 443
+  firewalld:
+      service: https
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_https
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+
+- name: Allow HTTP traffic on port 80
+  firewalld:
+      service: http
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_http
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow HTTP traffic on port 81
+  firewalld:
+      port: 81/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_proxymanager
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow HTTP traffic on port 8123
+  firewalld:
+      port: 8123/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_homeassistant
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow HTTP traffic on port 8443
+  firewalld:
+      port: 8443/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_unifi
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow multicast dns traffic
+  firewalld:
+      service: mdns
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_mdns or hassio_fw_enable_homekit
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow Apple Homekit traffic on port 51827
+  firewalld:
+      port: 51827/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_homekit
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Allow MQTT traffic on port 1883
+  firewalld:
+      port: 1883/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  when:
+      - hassio_fw_enable_mqtt
+      - ansible_facts.services["firewalld.service"] is defined
+      - ansible_facts.services["firewalld.service"].status == "enabled" or  ansible_facts.services["firewalld.service"].state == "started"
+
+- name: Install docker via geerlingguy.docker role
+  include_role:
+      name: geerlingguy.docker
+
+- name: Run hassio installer
+  shell: |
+      set -o pipefail
+      curl -sL https://raw.githubusercontent.com/home-assistant/hassio-installer/master/hassio_install.sh | bash -s
+  args:
+      warn: false
+      creates: /etc/systemd/system/hassio-supervisor.service
+
+- name: Wait for 30 seconds for port 8123 to be come available, timeout after 180 secs.
+  wait_for:
+      port: 8123
+      delay: 30
+      timeout: 180

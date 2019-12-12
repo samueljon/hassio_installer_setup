@@ -74,7 +74,7 @@ Example Playbook run
 ```shell
 # Start by checking if homeassistant is reachable
 ansible -m ping -i inventory.ini homeassistant
-# If the server responds with PONG then you can execute the playbook
+# If the server responds with PONG then you can execute the playbook. If the host is unreachable then refer to the ansible documentation on how to connect to hosts with ansible. 
 ansible-playbook -i inventory.ini install_homeassistant.yml
 ```
 

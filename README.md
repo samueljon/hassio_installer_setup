@@ -36,24 +36,47 @@ Dependencies
 
 This role uses geerlingguy.docker for installing or upgrading docker on the host.
 
+Example Inventory
+----------------
+
+Start by creating inventory ( for example `inventory.ini` where you specify where your homeassistant is located. You can specify `ansible_host="your-ip-number"` if you do not have a dns name for homeassistant machine.
+
+```ini
+[homeassistant]
+hassio.local ansible_host="192.168.0.10"
+```
+
 Example Playbook
 ----------------
 
-    - hosts: homeassistant
-      become: true
+Create a playbook with the following contents, for example `install_homeassistant.yml`.
 
-      tasks:
-        - include_role:
-            name: samueljon.hassio_installer_setup
-          vars:
-            hassio_fw_enable_homekit: true
-            hassio_fw_enable_mqtt: true
-            hassio_fw_enable_http: true
-            hassio_fw_enable_https: true
-            hassio_fw_enable_proxymanager: true
-            hassio_fw_enable_homeassistant: true
-            hassio_fw_enable_unifi: true
-            hassio_fw_enable_mdns: true
+```yaml
+- hosts: homeassistant
+  become: true
+
+  tasks:
+    - include_role:
+        name: samueljon.hassio_installer_setup
+      vars:
+        hassio_fw_enable_homekit: true
+        hassio_fw_enable_mqtt: true
+        hassio_fw_enable_http: true
+        hassio_fw_enable_https: true
+        hassio_fw_enable_proxymanager: true
+        hassio_fw_enable_homeassistant: true
+        hassio_fw_enable_unifi: true
+        hassio_fw_enable_mdns: true
+```
+Example Playbook run
+--------------------
+
+```shell
+# Start by checking if homeassistant is reachable
+ansible -m ping -i inventory.ini homeassistant
+# If the server responds with PONG then you can execute the playbook
+ansible-playbook -i inventory.ini install_homeassistant.yml
+```
 
 License
 -------

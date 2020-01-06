@@ -76,6 +76,7 @@ Example Playbook run
 ansible -m ping -i inventory.ini homeassistant
 # Install the ansible galaxy role that the playbook uses
 ansible-galaxy install samueljon.hassio_installer_setup
+ansible-galaxy install geerlingguy.docker
 # If the server responds with PONG then you can execute the playbook. If the host is unreachable then refer to the ansible documentation on how to connect to hosts with ansible. 
 ansible-playbook -i inventory.ini install_homeassistant.yml
 ```
